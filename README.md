@@ -4,7 +4,13 @@ A capstone project for Google Advanced Data Analytics Certificate program
 ![waze logo](https://d3c33hcgiwev3.cloudfront.net/imageAssetProxy.v1/xCm_NX3ARhGby5yNHxROZg_2a48fa4727ec4aaf9bd7e063838687f1_image.png?expiry=1734220800000&hmac=r4m5ThWUxUCukD3KMsbUTUpPK9-88YTDRkB_lC0TxfI)
 
 ## Executive Summary
-![Waze - Executive summary](https://github.com/user-attachments/assets/a64b0898-49c0-4f20-a5a8-aea36d851636)
+
+**Preliminary Data Summary:**
+![Preliminary - Executive summary](https://github.com/user-attachments/assets/a64b0898-49c0-4f20-a5a8-aea36d851636)
+
+**Exploratory Data Analysis:**
+![Waze Project EDA_ Executive summary](https://github.com/user-attachments/assets/578b0d06-50c3-4e80-a568-fd93317006bb)
+
 
 ## Introduction
 
@@ -62,16 +68,17 @@ Your Waze team includes several managers overseeing operations. It is important 
 * Summarize the column Dtypes
 * Communicate important findings in the form of an executive summary
 
-## PACE Strategy Document
+## Preliminary Data Summary
 
-**Project goal:**
+### Project goal
 
 Waze leadership has asked your data team to develop a machine learning model to predict user churn. Churn quantifies the number of users who have uninstalled the Waze app or stopped using the app. This project focuses on monthly user churn. An accurate model will help prevent churn, improve user retention, and grow Waze’s business.
 
 [Waze project proposal](https://docs.google.com/document/d/13C4UKfe1pz7J7cJ676XgvSOfHNxpxfR1WS4h1mVQ_bg/edit?usp=sharing)
+
 [PACE document](https://docs.google.com/document/d/1GZYAOKtrH-bYPePVMDWLViRaO5uQxDfr0YSpumFZME8/edit?usp=sharing)
 
-**Tasks:**
+### Tasks
 * Plan
 * Analyze
     * Import data
@@ -83,7 +90,7 @@ Waze leadership has asked your data team to develop a machine learning model to 
 * Construct
 * Execute
 
-## Data Description
+### Data description
 
 The dataset contains: 14,999 rows – each row represents one unique user, and 13 columns.
 
@@ -103,7 +110,7 @@ The dataset contains: 14,999 rows – each row represents one unique user, and 1
 | activity_days | int | Number of days the user opens the app during the month |
 | driving_days | int | Number of days the user drives (at least 1 km) during the month |
 
-## Data Preparation
+### Data preparation
 
 * Libraries were imported and data loaded.
 * Ran `head()` and `info()` methods to inspect data shape, type, and missing values. The 'label' variable (whether or not a user has churned) is missing 700 entries, but all the other variables are complete.
@@ -115,10 +122,38 @@ The dataset contains: 14,999 rows – each row represents one unique user, and 1
     * After we calculate the distance per drive, and drives per driving day, it became more apparent that churned users drive more on days when they drive at all. The median user who churned drove 698 kilometers each day they drove last month, which is almost ~240% the per-drive-day distance of retained users. The median churned user had a similarly disproporionate number of drives per drive day compared to retained users.
     * The ratio of iPhone users and Android users is consistent between the churned group and the retained group, and those ratios are both consistent with the ratio found in the overall dataset.
  
-## Preliminary Findings
+### Preliminary findings
 
 1. There are 700 entries where "label" (whether or not a user has churned) was missing. All the other variables are complete. Fortunately, there does not seem to be any pattern associated with the missing data. Summary statistics for this subgroup do not appear to be very different from the full dataset.
 2. Using median instead of mean reduces the impact of outliers. In our case, total distance driven is a right-skewed variable. The mean is 4,404 km, whereas the median is 2,500 km.
 3. Users who churned averaged ~3 more drives in the last month than retained users, and the median churned user drove ~200 more kilometers and 2.5 more hours during the last month than the median retained user. These seem like marginal difference, but considering distance per drive and drives per driving day, the churned users appear to have driven more often and for longer distance on a day when they drive at all. It is likely that they are someone who drives for a living, such as long-haul truck drivers.
 4. About 63% are iPhone users and 36% are Android users. There does not appear to be an appreciable difference in churn rate between iPhone users and Android users, since the ratio remains the same when we grouped data by hurned and retained users. Device compatibility is unlikely to be a factor.
 5. We've preliminarily established that a typical churned users may be someone who drives for a living. I would like to further investigate which features within Waze app is well liked, and which ones are not, and what may be the churned users' needs.
+
+## Exploratory Data Analysis
+
+### Project goal
+The Waze data team is currently developing a data analytics project aimed at increasing overall growth by preventing monthly user churn on the Waze app. Thorough exploratory data analysis (EDA) enables Waze to make better decisions about how to proactively target users likely to churn, thereby improving retention and overall customer satisfaction.
+
+[PACE document](https://docs.google.com/document/d/15Q9XGQK4GPk5dQZD3hKgbwbNHB9nsVeLxDSF6OrqFA0/edit?usp=sharing)
+
+### Tasks
+
+* Perform Exploratory Data Analysis (EDA)
+* Create data visualizations
+    * Create a scatterplot to enhance the visualization created with Python
+* Provide a summary of the results of your exploratory data analysis (EDA)
+
+### Summary of EDA and recommendations
+
+* There is 700 of missing values in the user churn label, so we might need further clarification why that may be the case from Waze. Fortunately, we found that the missing values do not seem to be associated with device type.
+    * **Recommendation**: Understanding the root case of missing values is a critical step. Imagine that all those missing values are in fact churned user, that could change how our data look quite a bit.
+* There are many outliers for drives, sessions, distance, and duration, and some of which seems physically impossible. During data cleaning, I imputed outliers with 95% percentile. It is worth investigating with Waze how the outliers emerged, as there could be a software bug with double counting trips, or failing to stop a trip.
+    * **Recommendation**: Understanding the outliers may help Waze identify and fix bugs, but is less urgent for our data exploration than the missing values, because the outliers have been addressed, and is less likely to impact our data greatly.
+* The number of drives and the number of sessions are both strongly correlated, so they might provide redundant information when we incorporate both in a model.
+    * **Recommendation**: When building a model, choose one from sessions and drives, and/or one from activity days and driving days, because they are highly correlated.
+* Excluding the users who did not drive at all, the churned users drove less frequent, but drive longer distance when they do.
+    * **Recommendation**: Find out more demographic information, especially of the churned users. Do they share a common profile and/or driving habit? What are they looking for in a navigation app, and what do they like and not like about Waze?
+* Users appear to be very active in the observed month. The sessions on average accounts for 40% of all app usage since onboarding, even for longtime users who signed up years ago.
+    * **Recommendation**: If there had been updates or campaigns last month, they might be effective with boosting app usage, and we may want to explore if they are repeatable and sustainable.
+
