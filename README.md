@@ -1,16 +1,22 @@
 # Waze Case Study
 A capstone project for Google Advanced Data Analytics Certificate program
 
-![waze logo](https://d3c33hcgiwev3.cloudfront.net/imageAssetProxy.v1/xCm_NX3ARhGby5yNHxROZg_2a48fa4727ec4aaf9bd7e063838687f1_image.png?expiry=1734220800000&hmac=r4m5ThWUxUCukD3KMsbUTUpPK9-88YTDRkB_lC0TxfI)
+![Waze logo](https://github.com/user-attachments/assets/3b8be2fa-6df1-4a17-b1d5-4f1281066f46)
+
 
 ## Executive Summary
 
 **Preliminary Data Summary:**
+
 ![Preliminary - Executive summary](https://github.com/user-attachments/assets/a64b0898-49c0-4f20-a5a8-aea36d851636)
 
 **Exploratory Data Analysis:**
+
 ![Waze Project EDA_ Executive summary](https://github.com/user-attachments/assets/578b0d06-50c3-4e80-a568-fd93317006bb)
 
+**Hypothesis Testing:**
+
+![Waze project_ hypothesis testing executive summaries](https://github.com/user-attachments/assets/ccc6f38f-24eb-451e-a661-2cbb694f664e)
 
 ## Introduction
 
@@ -59,14 +65,6 @@ Data team members have technical experience with data analysis and data science.
 Your Waze team includes several managers overseeing operations. It is important to adapt your communication to their roles since their responsibilities are less technical.
 
 *Note: The story, all names, characters, and incidents portrayed in this project are fictitious. No identification with actual persons (living or deceased) is intended or should be inferred. And, the data shared in this project has been created for pedagogical purposes.*
-
-#### Specific project deliverables
-
-* Complete the questions in the Course 2 PACE strategy document
-* Answer the questions in the Jupyter notebook project file
-* Complete coding prep work on project’s Jupyter notebook
-* Summarize the column Dtypes
-* Communicate important findings in the form of an executive summary
 
 ## Preliminary Data Summary
 
@@ -157,3 +155,24 @@ The Waze data team is currently developing a data analytics project aimed at inc
 * Users appear to be very active in the observed month. The sessions on average accounts for 40% of all app usage since onboarding, even for longtime users who signed up years ago.
     * **Recommendation**: If there had been updates or campaigns last month, they might be effective with boosting app usage, and we may want to explore if they are repeatable and sustainable.
 
+## Hypothesis Testing
+
+### Project goal
+
+The main purpose of this project is to understand if there is meaningful difference in the amount of rides between iPhone users and Android users. With this information, business leaders at Waze can think about strategies to address these differences, such as improving user experience on a specific device.
+
+[PACE document](https://docs.google.com/document/d/1NE-K6zajeFlRFsPUhtKg95We2dlWahkeiAU1S3OvXqc/edit?usp=sharing)
+
+### Tasks
+
+* Explore the project data
+* Implement a hypothesis test
+* Communicate insights with stakeholders within Waze
+
+### Summary of hypothesis testing
+
+The descriptive statistics show that on average, iPhone users do ~1.5 more drives than Android users over the observed month, but we don’t know if this is due to sampling variability. We completed a two-sample t-test with the following hypothesis:
+* Null hypothesis: There is no difference between the average number of drives of iPhone users and Android users.
+* Alternative: There is difference between the average number of drives of iPhone users and Android users.
+
+The result is that we fail to reject the null. Since we do not see significant difference in user behavior between iPhone and Android users, at this stage we do not recommend making changes specific to a device type. We recommend looking into other factors that may impact user churn.
