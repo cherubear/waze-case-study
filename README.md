@@ -20,6 +20,8 @@ A capstone project for Google Advanced Data Analytics Certificate program
 
 **Regression Analysis:**
 
+![Waze Project_ Logistic Regression Model Executive summaries](https://github.com/user-attachments/assets/dae32208-0035-469c-b07b-cfc7caca849b)
+
 
 ## Introduction
 
