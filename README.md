@@ -18,6 +18,9 @@ A capstone project for Google Advanced Data Analytics Certificate program
 
 ![Waze project_ hypothesis testing executive summaries](https://github.com/user-attachments/assets/ccc6f38f-24eb-451e-a661-2cbb694f664e)
 
+**Regression Analysis:**
+
+
 ## Introduction
 
 ### Background on the Waze scenario
@@ -92,21 +95,21 @@ Waze leadership has asked your data team to develop a machine learning model to 
 
 The dataset contains: 14,999 rows – each row represents one unique user, and 13 columns.
 
-| Column name | Type | Description |
-| ... | ... | ... |
-| ID | int | A sequential numbered index |
-| label | obj | Binary target variable (“retained” vs “churned”) for if a user has churned anytime during the course of the month |
-| sessions | int | The number of occurrence of a user opening the app during the month |
-| drives | int | An occurrence of driving at least 1 km during the month |
-| device | obj | The type of device a user starts a session with |
-| total_sessions | float | A model estimate of the total number of sessions since a user has onboarded |
-| n_days_after_onboarding | int | The number of days since a user signed up for the app |
-| total_navigations_fav1 | int | Total navigations since onboarding to the user’s favorite place 1 |
-| total_navigations_fav2 | int | Total navigations since onboarding to the user’s favorite place 2 |
-| driven_km_drives | float | Total kilometers driven during the month |
-| duration_minutes_drives | float | Total duration driven in minutes during the month |
-| activity_days | int | Number of days the user opens the app during the month |
-| driving_days | int | Number of days the user drives (at least 1 km) during the month |
+| Column name             | Type  | Description                                                                                                        |
+|-------------------------|-------|--------------------------------------------------------------------------------------------------------------------|
+| label                   | obj   | Binary target variable (“retained” vs “churned”) for if a user has churned anytime during the course of the month  |
+| sessions                | int   | The number of occurrence of a user opening the app during the month                                                |
+| drives                  | int   | An occurrence of driving at least 1 km during the month                                                            |
+| device                  | obj   | The type of device a user starts a session with                                                                    |
+| total_sessions          | float | A model estimate of the total number of sessions since a user has onboarded                                        |
+| n_days_after_onboarding | int   | The number of days since a user signed up for the app                                                              |
+| total_navigations_fav1  | int   | Total navigations since onboarding to the user’s favorite place 1                                                  |
+| total_navigations_fav2  | int   | Total navigations since onboarding to the user’s favorite place 2                                                  |
+| driven_km_drives        | float | Total kilometers driven during the month                                                                           |
+| duration_minutes_drives | float | Total duration driven in minutes during the month                                                                  |
+| activity_days           | int   | Number of days the user opens the app during the month                                                             |
+| driving_days            | int   | Number of days the user drives (at least 1 km) during the month                                                    |
+
 
 ### Data preparation
 
@@ -176,3 +179,28 @@ The descriptive statistics show that on average, iPhone users do ~1.5 more drive
 * Alternative: There is difference between the average number of drives of iPhone users and Android users.
 
 The result is that we fail to reject the null. Since we do not see significant difference in user behavior between iPhone and Android users, at this stage we do not recommend making changes specific to a device type. We recommend looking into other factors that may impact user churn.
+
+## Machine learning model
+
+### Project goal
+
+The goal of this project to build a statistical model that will help predict if a user will churn or not given the usages information collected in the Waze app.
+
+### Tasks
+
+* Determine the correct modeling approach
+* Build a regression model
+* Finish checking model assumptions
+* Evaluate the model
+* Interpret model results and summarize findings for cross-departmental stakeholders within Waze
+
+### Summary of model construction
+
+As we are trying to predict if a user will churn given a series of independent variables, we will build a binomial logistic regression model. We started with looking at multicollinearity between all independent variables, and discovered that sessions and drives are strongly correlated, and driving_days and activity_days are strongly correlated. Therefore, the first model we built is to drop sessions and activity_days, and try all the other variables as independent variables in our model. Below are our findings:
+
+1. driving_days is the variable that has most influenced the model's prediction. It has a negative correlation with user churn, which is not surprising. The more a user uses the app, the less likely they will churn.
+2. In the EDA, we found that km_per_driving_day may be positively correlated to churn, but in our regression model, the relationship was negligible.
+3. In multivariate model, variables may interact with each other in unexpected ways. Therefore we may see results that we did not expect.
+4. When evaluating the model, we find that precision score is mediocre and recall score is extremely low. It does not appear to be an effective model. I would not recommend using this model as is. There are many variables with weak predicting power. I would recommend removing variables that are not useful.
+5. I would start with removing variables that are not useful. In the meantime, as we recommended a few times in previous phases of this project, more information needs to be collected about user demographics and drive-level information. Our findings in this model construction phase substantiated this view because our model does not perform very well.
+6. It would be helpful to have demographics information, or more details about how users use the app. For example, if there are multiple features in the app, which ones are used during drives.
