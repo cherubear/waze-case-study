@@ -182,7 +182,7 @@ The descriptive statistics show that on average, iPhone users do ~1.5 more drive
 
 The result is that we fail to reject the null. Since we do not see significant difference in user behavior between iPhone and Android users, at this stage we do not recommend making changes specific to a device type. We recommend looking into other factors that may impact user churn.
 
-## Machine learning model
+## Regression model
 
 ### Project goal
 
@@ -206,3 +206,67 @@ As we are trying to predict if a user will churn given a series of independent v
 4. When evaluating the model, we find that precision score is mediocre and recall score is extremely low. It does not appear to be an effective model. I would not recommend using this model as is. There are many variables with weak predicting power. I would recommend removing variables that are not useful.
 5. I would start with removing variables that are not useful. In the meantime, as we recommended a few times in previous phases of this project, more information needs to be collected about user demographics and drive-level information. Our findings in this model construction phase substantiated this view because our model does not perform very well.
 6. It would be helpful to have demographics information, or more details about how users use the app. For example, if there are multiple features in the app, which ones are used during drives.
+
+## Machine learning models
+
+### Project goal
+
+We want to build and test different machine learning models to predict user churn. Our work will help Waze leadership make informed business decisions to prevent user churn, improve user retention, and grow Waze’s business. 
+
+### Tasks
+
+Previously, I built a binomial logistic regression model. However, the predicting power is quite weak. The final step is to build and test different machine learning models for predicting user churn. The step is consist of the following sub-tasks.
+
+* Perform feature engineering
+* Build the following machine learning models: random forest and XGBoost
+* Evaluate the models
+* Share an executive summary with the Waze leadership team
+
+### Model construction
+
+To use existing data to determine whether or not a user will churn (binary outcome), we will start building and testing the following machine learning models: random forest classifier and XGBoost.
+
+#### Considerations before model construction
+
+We are building and testing machine learning models that will help predict user churn with existing data.
+
+First, we must value users privacy. To do so, we ensure no personal identification information can be backed out from our model. Given what I know about the dataset, the risk of privacy infringement in this project is low. Second, We should be wary of any bias that could result from the model, which may also lead to biased treatment to Waze users if any subsequent business decisions were made based on model findings. We are aware the model will not be error-free - a false negative means failing to identify a churning user, denying Waze the opportunity to make an effort to retain the user; while a false positive means unnecessary cost for Waze to retain a user who was not going to churn anyway.
+
+Since Waze is invested in this project to reduce user churn and grow their user base, therefore the benefits of such a model outweigh the potential problems if the model has a reasonably good predicting power. We will aim to build a model that has good recall score, that is, try not to miss users who will likely churn.
+
+**Step-by-step**:
+* Import packages and load data
+* Feature engineering
+   * Calculate the distance traveled per driving day
+   * Calculate the amount of sessions each user had during the last month, as a percentage of total sessions since onboarding
+   * Create a binary label of professional driver, which is defined as someone who had 60 or more drives and drove on 15+ days in the last month
+   * Calculate sessions per day since onboarding
+   * Calculate average driving speed of each driver, km per hour
+   * Calculate average driving distance per drive, km per drive
+   * Calculate the percent of navigations of favorite destinations, as a percentage of total sessions
+         * Note: this is a proxy since sessions and drives may not have the same scale. The result is not a true percentage in the range [0, 1].
+   * Encode categorical values "device" and "label" as numeric (in this case, both are binary)
+* Model construction
+   * Split the data into train/validation/test sets (60/20/20)
+   * Train a Random Forest Classifier with cross validation within the train dataset, and iterate across these hyperparameters to find an estimator with best recall score:
+     * max_features: any or all 18 variables
+     * min_sample_split: 2 or 3
+     * max_depth: no restriction
+     * n_estimators: 100, 200 or 300
+     * **Findings:** We got a Random Forest Classifier with recall score of 0.13. It is an improvement from the logistic regression model, but still far from ideal.
+   * Train a XGBoost model with cross validation within the train dataset, and iterate across these hyperparameters to find an estimator with best recall score:
+     * max_depth: 5, 10
+     * min_child_weight: 3 or 5
+     * learning_rate: 0.01 or 0.1
+     * n_estimators: 300
+     * **Findings:**
+
+### Conclusion
+
+1. The Random Forest improved recall of churned user to 12% (compared to 9% with a logistic regression model).
+2. The XGBoost model improved recall to 17%, another big improvement from the Random Forest Classifier.
+3. Still, a recall rate of 10-12% is far less than ideal. Although not necessarily a model fit for deployment in predicting user churn and inform business decisions, it provides some directional recommendations regarding how we may want to further explore.
+4. The engineering features ranked high in importance, such as km per hour, percent of sessions last month. This is very different from the logistic regression model, in which driving_days was the one dominating feature.
+5. **Recommendations:**
+    * Communicate with Waze to obtain business insights if certain features are intuitive, for example, something is working so that app usage increased last month, and our model shows that this is also associated with lower likelihood of user churn. Looks like an effective business strategy already. Why this happened, and can it be sustainable?
+    * Explore drive-level details in order to refine our model, for example, does user use any of the social features in app, like reporting a road condition?
