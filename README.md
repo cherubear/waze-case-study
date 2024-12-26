@@ -22,6 +22,10 @@ A capstone project for Google Advanced Data Analytics Certificate program
 
 ![Waze Project_ Logistic Regression Model Executive summaries](https://github.com/user-attachments/assets/dae32208-0035-469c-b07b-cfc7caca849b)
 
+**Ensemble Models:**
+![Waze project_ Machine Learning Models Executive summaries (1)](https://github.com/user-attachments/assets/d5d9128e-5320-40c9-bf04-96da05cd4478)
+
+
 
 ## Introduction
 
